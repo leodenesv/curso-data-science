@@ -52,29 +52,3 @@ melhor_idx = np.argmax(r2_testes)
 print(f"Melhor alpha: {alphas[melhor_idx]}")
 print(f"R² teste com melhor alpha: {r2_testes[melhor_idx]:.3f}")
 
-from sklearn.model_selection import cross_val_score
-from sklearn.linear_model import Ridge
-from sklearn.preprocessing import PolynomialFeatures, StandardScaler
-from sklearn.pipeline import make_pipeline
-from sklearn.model_selection import train_test_split
-import numpy as np
-
-np.random.seed(42)
-X = np.linspace(0, 10, 100).reshape(-1, 1)
-y = 2 * X.ravel()**2 - 5 * X.ravel() + np.random.normal(0, 8, 100)
-
-modelo = make_pipeline(
-    PolynomialFeatures(4),
-    StandardScaler(),
-    Ridge(alpha=1)
-)
-
-scores = cross_val_score(modelo, X, y, cv=5, scoring="r2")
-
-print("R² em cada fold:")
-for i, score in enumerate(scores):
-    print(f"  Fold {i+1}: {score:.3f}")
-
-print(f"\nMédia R²:        {scores.mean():.3f}")
-print(f"Desvio padrão:   {scores.std():.3f}")
-print(f"\nInterpretação: modelo tem R² de {scores.mean():.3f} ± {scores.std():.3f}")
